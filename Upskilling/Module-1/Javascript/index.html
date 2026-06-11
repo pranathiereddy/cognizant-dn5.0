@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Event Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .event-card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; display: none; }
+        #spinner { display: none; font-weight: bold; color: blue; }
+        .error { color: red; font-size: 0.9em; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Local Community Event Portal</h1>
+    
+    <input type="text" id="searchInput" placeholder="Search events by name...">
+    <select id="categoryFilter">
+        <option value="All">All Categories</option>
+        <option value="Music">Music</option>
+        <option value="Tech">Tech</option>
+    </select>
+
+    <div id="spinner">Loading events...</div>
+
+    <div id="eventContainer"></div>
+
+    <hr>
+
+    <h2>Register for an Event</h2>
+    <form id="registrationForm">
+        <label>Name: <input type="text" id="userName" name="userName"></label><br><br>
+        <label>Email: <input type="email" id="userEmail" name="userEmail"></label><br><br>
+        <label>Event: 
+            <select id="eventSelect" name="eventSelect">
+            </select>
+        </label><br><br>
+        <span id="formError" class="error"></span><br>
+        <button type="submit" id="registerBtn">Register</button>
+    </form>
+    <div id="statusMessage"></div>
+
+    <script>
+        console.log("Welcome to the Community Portal");
+
+        window.onload = () => {
+            alert("Page is fully loaded!");
+        };
+
+        const createRegistrationTracker = () => {
+            let totalRegistrations = 0;
+            return () => {
+                totalRegistrations++;
+                console.log(`Total System Registrations: ${totalRegistrations}`);
+            };
+        };
+        const trackRegistration = createRegistrationTracker();
+
+        function CommunityEvent(name, date, category, seats) {
+            this.name = name;
+            this.date = date;
+            this.category = category;
+            this.seats = seats; 
+        }
+
+        CommunityEvent.prototype.checkAvailability = function() {
+            return this.seats > 0;
+        };
+
+        let allEvents = [];
+
+        const fetchEvents = async () => {
+            const spinner = document.querySelector('#spinner');
+            spinner.style.display = 'block';
+
+            try {
+                const mockData = await new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve([
+                            new CommunityEvent("Jazz Night", "2026-07-01", "Music", 5),
+                            new CommunityEvent("React Workshop", "2026-07-10", "Tech", 0),
+                            new CommunityEvent("Rock Fest", "2026-08-15", "Music", 50)
+                        ]);
+                    }, 1000);
+                });
+
+                mockData.forEach(event => allEvents.push(event));
+                
+                spinner.style.display = 'none';
+                renderEvents(allEvents);
+                populateDropdown();
+            } catch (error) {
+                console.error("Error fetching events:", error);
+            }
+        };
+
+        const renderEvents = (eventsToRender = []) => {
+            const container = document.querySelector('#eventContainer');
+            container.innerHTML = '';
+
+            const formattedCards = eventsToRender.map(event => {
+                const { name, date, category, seats } = event;
+                
+                if (!event.checkAvailability()) return null;
+
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.innerHTML = `<h3>${name}</h3><p>Date: ${date} | Category: ${category} | Seats: ${seats}</p>`;
+                
+                console.log(Object.entries(event)); 
+                
+                return card;
+            });
+
+            formattedCards.forEach(card => {
+                if (card) {
+                    container.appendChild(card);
+                    $(card).fadeIn(500); 
+                }
+            });
+        };
+
+        const populateDropdown = () => {
+            const select = document.querySelector('#eventSelect');
+            allEvents.forEach(event => {
+                if (event.checkAvailability()) {
+                    const option = document.createElement('option');
+                    option.value = event.name;
+                    option.textContent = event.name;
+                    select.appendChild(option);
+                }
+            });
+        };
+
+        document.querySelector('#categoryFilter').onchange = (e) => {
+            const category = e.target.value;
+            let filtered = [...allEvents]; 
+            
+            if (category !== "All") {
+                filtered = filtered.filter(ev => ev.category === category);
+            }
+            renderEvents(filtered);
+        };
+
+        document.querySelector('#searchInput').onkeydown = (e) => {
+            const query = e.target.value.toLowerCase();
+            const searched = allEvents.filter(ev => ev.name.toLowerCase().includes(query));
+            renderEvents(searched);
+        };
+
+        const form = document.querySelector('#registrationForm');
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            
+            const name = form.elements['userName'].value;
+            const email = form.elements['userEmail'].value;
+            const eventName = form.elements['eventSelect'].value;
+            const errorSpan = document.querySelector('#formError');
+
+            if (!name || !email) {
+                errorSpan.textContent = "Please fill in all fields.";
+                return;
+            }
+            errorSpan.textContent = "";
+
+            const selectedEvent = allEvents.find(ev => ev.name === eventName);
+            if (selectedEvent) selectedEvent.seats--;
+
+            const payload = { name, email, eventName };
+            fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'Content-type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('#statusMessage').textContent = `Success! Registered for ${data.eventName}`;
+                trackRegistration();
+                renderEvents(allEvents);
+            })
+            .catch(err => {
+                document.querySelector('#statusMessage').textContent = "Registration failed.";
+                console.error(err);
+            });
+        };
+
+        $('#registerBtn').click(() => {
+            console.log("jQuery detected a click on the register button.");
+        });
+
+        fetchEvents();
+    </script>
+</body>
+</html>
