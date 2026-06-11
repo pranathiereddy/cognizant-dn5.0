@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Local Community Event Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    body {
+      background-color: #f0f4f8;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="mainHeader">
+    <h1>Local Community Event Portal</h1>
+    <p class="section-intro">Your one-stop place for local events and community updates</p>
+  </div>
+
+  <nav id="navigation">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#bulletin">Bulletin</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="help.html" target="_blank">Help</a></li>
+    </ul>
+  </nav>
+
+  <section id="home">
+
+    <h2 style="color: red;">Welcome to the Portal</h2>
+
+    <div id="welcomeBanner">
+      <p>Hello! Welcome back. You are logged in.</p>
+      <p>Special offer: <span style="color: #FFD700; font-weight: bold;">Free entry this weekend!</span></p>
+      <p class="highlight">Don't miss out on upcoming events near you!</p>
+    </div>
+
+    <h2>Upcoming Events</h2>
+
+    <div class="eventCard">
+      <h3>Music Night</h3>
+      <p class="description">Join us for a fun evening of live music and performances from local artists.</p>
+      <button class="cta-button">Register Now</button>
+    </div>
+
+    <div class="eventCard">
+      <h3>Food Festival</h3>
+      <p class="description">Taste dishes from over 20 local food vendors all in one place.</p>
+      <button class="cta-button">Register Now</button>
+    </div>
+
+    <div class="eventCard">
+      <h3>Sports Day</h3>
+      <p class="description">Fun outdoor sports activities for all ages. Come and participate!</p>
+      <button class="cta-button">Register Now</button>
+    </div>
+
+  </section>
+
+  <section id="events">
+    <h2>Image Gallery for Community Events</h2>
+
+    <table>
+      <tr>
+        <td>
+          <img src="event1.jpg" alt="Music Night" title="Music Night">
+          <p class="caption">Music Night</p>
+        </td>
+        <td>
+          <img src="event2.jpg" alt="Food Festival" title="Food Festival">
+          <p class="caption">Food Festival</p>
+        </td>
+        <td>
+          <img src="event3.jpg" alt="Art Exhibition" title="Art Exhibition">
+          <p class="caption">Art Exhibition</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <img src="event4.jpg" alt="Sports Day" title="Sports Day">
+          <p class="caption">Sports Day</p>
+        </td>
+        <td>
+          <img src="event5.jpg" alt="Cultural Fest" title="Cultural Fest">
+          <p class="caption">Cultural Fest</p>
+        </td>
+        <td>
+          <img src="event6.jpg" alt="Kids Fair" title="Kids Fair">
+          <p class="caption">Kids Fair</p>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Admin Events Table</h2>
+    <table id="adminTable">
+      <tr>
+        <th>Event Name</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Fee</th>
+      </tr>
+      <tr>
+        <td>Music Night</td>
+        <td>12 July 2025</td>
+        <td>City Hall</td>
+        <td>Free</td>
+      </tr>
+      <tr>
+        <td>Food Festival</td>
+        <td>20 July 2025</td>
+        <td>Central Park</td>
+        <td>₹100</td>
+      </tr>
+      <tr>
+        <td>Art Exhibition</td>
+        <td>28 July 2025</td>
+        <td>Community Centre</td>
+        <td>₹50</td>
+      </tr>
+      <tr>
+        <td>Sports Day</td>
+        <td>5 Aug 2025</td>
+        <td>Sports Ground</td>
+        <td>Free</td>
+      </tr>
+    </table>
+
+    <h2>Event Registration Form</h2>
+
+    <form id="registrationForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required autofocus>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="eventType">Event Type:</label>
+      <select id="eventType" name="eventType">
+        <option value="">Select an event</option>
+        <option value="music">Music Night</option>
+        <option value="food">Food Festival</option>
+        <option value="sports">Sports Day</option>
+        <option value="art">Art Exhibition</option>
+      </select>
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" placeholder="Any message or special request" rows="4"></textarea>
+
+      <button type="submit" class="cta-button">Register</button>
+
+      <output id="formOutput" name="formOutput" for="name email"></output>
+    </form>
+
+  </section>
+
+  <section id="feedback">
+    <h2>Event Feedback</h2>
+
+    <label for="phone">Phone Number:</label>
+    <input
+      type="text"
+      id="phone"
+      name="phone"
+      placeholder="Enter phone number"
+      onblur="if(this.value.length < 10) { alert('Please enter a valid phone number'); }"
+    >
+
+    <label for="fee">Select Event Fee:</label>
+    <select
+      id="fee"
+      name="fee"
+      onchange="document.getElementById('feeDisplay').textContent = 'Selected fee: ₹' + this.value;"
+    >
+      <option value="">-- Choose --</option>
+      <option value="0">Free</option>
+      <option value="100">₹100</option>
+      <option value="250">₹250</option>
+      <option value="500">₹500</option>
+    </select>
+    <p id="feeDisplay"></p>
+
+    <button class="cta-button" onclick="alert('Thank you! Your feedback has been submitted.')">Submit Feedback</button>
+
+    <br><br>
+    <img
+      src="event1.jpg"
+      id="feedbackImg"
+      alt="Event Image"
+      title="Double click to enlarge"
+      width="150"
+      ondblclick="this.width = this.width == 150 ? 300 : 150;"
+    >
+    <p style="font-size: 12px; color: gray;">Double click the image to enlarge</p>
+
+    <label for="feedbackText">Your Feedback:</label>
+    <textarea
+      id="feedbackText"
+      rows="4"
+      placeholder="Write your feedback here..."
+      onkeyup="document.getElementById('charCount').textContent = 'Characters typed: ' + this.value.length;"
+    ></textarea>
+    <p id="charCount">Characters typed: 0</p>
+  </section>
+
+  <section id="bulletin">
+    <h2>Community Bulletin</h2>
+    <p class="section-intro">Latest news from around the community</p>
+
+    <div class="news-article">
+      <p>The city council has announced a series of community events this summer aimed at bringing residents together. From music nights to food festivals, there is something for everyone to enjoy in the coming months.</p>
+      <p>Local volunteers are being requested to assist with setup and coordination of these events. If you are interested in helping out, please contact the community office before the end of this month.</p>
+      <p>The annual sports day will feature new activities this year including a fun relay race and a cricket match open to all age groups. Registration is completely free and families are encouraged to participate together.</p>
+      <p>The art exhibition will showcase work from over 30 local artists. Paintings, sculptures, and digital art will all be on display. Entry is open to the public and refreshments will be provided by local vendors.</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>Email us at: community@localevents.com</p>
+    <p>Phone: +91-9876543210</p>
+  </section>
+
+  <footer>
+    <p>Local Community Event Portal &copy; 2026</p>
+  </footer>
+
+</body>
+</html>
